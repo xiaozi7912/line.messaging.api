@@ -58,16 +58,14 @@ function handleMessage(replyToken, received_message) {
     console.log('handleMessage received_message : ' + received_message);
     let response;
 
-    if (received_message == 'aaaa') {
-        response = [{
-            "type": "text",
-            "text": "Hello"
-        }, {
-            "type": "text",
-            "text": `You texted ${received_message}`
-        }];
-        callReplyAPI(replyToken, response);
-    }
+    response = [{
+        "type": "text",
+        "text": "Hello"
+    }, {
+        "type": "text",
+        "text": `You texted ${received_message}`
+    }];
+    callReplyAPI(replyToken, response);
 }
 
 function callReplyAPI(replyToken, response) {
