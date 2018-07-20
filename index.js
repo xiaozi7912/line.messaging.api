@@ -11,7 +11,7 @@ const crypto = require('crypto');
 const APP_ACCESS_TOKEN = process.env.APP_ACCESS_TOKEN;
 const FACEBOOK_PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
 const channelSecret = process.env.LINE_CHANNEL_SECRET; // Channel secret string
-const body = ...; // Request body string
+const body = ''; // Request body string
 const signature = crypto.createHmac('SHA256', channelSecret).update(body).digest('base64');
 // Compare X-Line-Signature request header and the signature
 
@@ -27,7 +27,7 @@ app.get('/webhook', (req, res) => {
 app.post('/webhook', (req, res) => {
     let body = req.body;
     console.log(body);
-    
+
     res.status(200).send('Success');
 });
 
