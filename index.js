@@ -28,6 +28,11 @@ app.post('/webhook', (req, res) => {
     let body = req.body;
     console.log(body);
 
+    let webhook_event = body.events[0];
+    console.log(webhook_event);
+    console.log(webhook_event.source);
+    console.log(webhook_event.message);
+
     res.status(200).send('Success');
 });
 
