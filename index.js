@@ -82,7 +82,7 @@ function callReplyAPI(replyToken, response) {
     let request_options = {
         "uri": "https://api.line.me/v2/bot/message/reply",
         "headers": {
-            "Authorization": ' Bearer ${LINE_CHANNEL_TOKEN}'
+            "Authorization": `Bearer ${LINE_CHANNEL_TOKEN}`
         },
         "method": "POST",
         "json": request_body
