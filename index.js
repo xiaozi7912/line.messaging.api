@@ -75,19 +75,21 @@ function callReplyAPI(replyToken, response) {
 	console.log('replyToken replyToken : ' + replyToken);
 	console.log(response);
 
+	let request_options = {
+		"uri": "https://api.line.me/v2/bot/message/reply",
+		"headers": {
+			"Authorization": ' Bearer ${LINE_CHANNEL_TOKEN}'
+		},
+		"method": "POST",
+		"json": request_body
+	}
 	let request_body = {
 		'replyToken': replyToken,
 		'messages': response
 	};
+	console.log(request_options);
 
-	request({
-		"uri": "https://api.line.me/v2/bot/message/reply",
-		"headers": {
-			"Authorization": 'Bearer ${LINE_CHANNEL_TOKEN}'
-		},
-		"method": "POST",
-		"json": request_body
-	}, (err, res, body) => {
+	request(request_options, (err, res, body) => {
 		if (!err) {
 			console.log(body);
 			console.log('message sent!');
