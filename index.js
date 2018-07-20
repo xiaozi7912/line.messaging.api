@@ -75,7 +75,7 @@ function callReplyAPI(replyToken, response) {
 	console.log('replyToken replyToken : ' + replyToken);
 	console.log(response);
 
-	let request_boyd = {
+	let request_body = {
 		'replyToken': replyToken,
 		'messages': response
 	};
