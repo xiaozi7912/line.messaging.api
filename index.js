@@ -15,7 +15,7 @@ app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
 // Adds support for GET requests to our webhook
 app.get('/webhook', (req, res) => {
-   res.sendStatus(200);
+    res.status(200).send('Success');
 });
 
 // Creates the endpoint for our webhook
