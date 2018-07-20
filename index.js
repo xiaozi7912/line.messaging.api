@@ -6,9 +6,14 @@ const
     bodyParser = require('body-parser'),
     app = express().use(bodyParser.json()); // creates express http server
 const request = require('request');
+const crypto = require('crypto');
 
 const APP_ACCESS_TOKEN = process.env.APP_ACCESS_TOKEN;
 const FACEBOOK_PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
+const channelSecret = process.env.LINE_CHANNEL_SECRET; // Channel secret string
+const body = ...; // Request body string
+const signature = crypto.createHmac('SHA256', channelSecret).update(body).digest('base64');
+// Compare X-Line-Signature request header and the signature
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
@@ -20,6 +25,9 @@ app.get('/webhook', (req, res) => {
 
 // Creates the endpoint for our webhook
 app.post('/webhook', (req, res) => {
+    let body = req.body;
+    console.log(body);
+    
     res.status(200).send('Success');
 });
 
