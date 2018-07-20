@@ -10,9 +10,10 @@ const crypto = require('crypto');
 
 const APP_ACCESS_TOKEN = process.env.APP_ACCESS_TOKEN;
 const FACEBOOK_PAGE_ACCESS_TOKEN = process.env.FACEBOOK_PAGE_ACCESS_TOKEN;
-const channelSecret = process.env.LINE_CHANNEL_SECRET; // Channel secret string
+const LINE_CHANNEL_SECRET = process.env.LINE_CHANNEL_SECRET; // Channel secret string
+const LINE_CHANNEL_TOKEN = process.env.LINE_CHANNEL_TOKEN;
 const body = ''; // Request body string
-const signature = crypto.createHmac('SHA256', channelSecret).update(body).digest('base64');
+const signature = crypto.createHmac('SHA256', LINE_CHANNEL_SECRET).update(body).digest('base64');
 // Compare X-Line-Signature request header and the signature
 
 // Sets server port and logs message on success
@@ -74,9 +75,9 @@ function callSendAPI(sender_psid, response) {
 
     // Send the HTTP request to the Messenger Platform
     request({
-        "uri": "https://graph.facebook.com/v2.6/me/messages",
+        "uri": "https://api.line.me/v2/bot/message/reply",
         "qs": {
-            "access_token": APP_ACCESS_TOKEN
+            "access_token": LINE_CHANNEL_TOKEN
         },
         "method": "POST",
         "json": request_body
