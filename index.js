@@ -64,7 +64,7 @@ function handleMessage(replyToken, received_message) {
             "text": "Hello"
         }, {
             "type": "text",
-            "text": 'You texted ${received_message}'
+            "text": `You texted ${received_message}`
         }];
         callReplyAPI(replyToken, response);
     }
