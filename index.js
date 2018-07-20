@@ -2,9 +2,9 @@
 
 // Imports dependencies and set up http server
 const
-    express = require('express'),
-    bodyParser = require('body-parser'),
-    app = express().use(bodyParser.json()); // creates express http server
+	express = require('express'),
+	bodyParser = require('body-parser'),
+	app = express().use(bodyParser.json()); // creates express http server
 const request = require('request');
 const crypto = require('crypto');
 
@@ -21,72 +21,78 @@ app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
 // Adds support for GET requests to our webhook
 app.get('/webhook', (req, res) => {
-    res.status(200).send('Success');
+	res.status(200).send('Success');
 });
 
 // Creates the endpoint for our webhook
 app.post('/webhook', (req, res) => {
-    let body = req.body;
-    console.log(body);
+	let body = req.body;
+	console.log(body);
 
-    let webhook_event = body.events[0];
-    console.log(webhook_event);
-    console.log(webhook_event.source);
-    console.log(webhook_event.message);
+	let webhook_event = body.events[0];
 
-    res.status(200).send('Success');
+	if (webhook_event) {
+		console.log(webhook_event);
+		console.log(webhook_event.source);
+		console.log(webhook_event.message);
+		console.log(webhook_event.replyToken);
+		let type = webhook_event.type;
+		let replyToken = webhook_event.replyToken;
+
+		if (type == 'message') {
+			let messageType = webhook_event.message.type;
+			let messageText = webhook_event.message.text
+			if (messageType == 'text') {
+				handleMessage(replyToken, messageText);
+			}
+		}
+		res.status(200).send('Success');
+	} else {
+		res.sendStatus(403);
+	}
 });
 
-// Handles messages events
-function handleMessage(sender_psid, received_message) {
-    console.log('handleMessage');
-    console.log('handleMessage received_message : ' + received_message);
-    console.log('handleMessage received_message.text : ' + received_message.text);
-    let response;
+function handleMessage(replyToken, received_message) {
+	console.log('handleMessage');
+	console.log('handleMessage replyToken : ' + replyToken);
+	console.log('handleMessage received_message : ' + received_message);
+	let response;
 
-    // Check if the message contains text
-    if (received_message.text == 'hello') {
-
-        // Create the payload for a basic text message
-        response = {
-            "text": 'hi'
-        }
-    }
-
-    // Sends the response message
-    callSendAPI(sender_psid, response);
+	if (received_message == 'aaaa') {
+		response = [{
+			"type": "text",
+			"text": "Hello"
+		}, {
+			"type": "text",
+			"text": 'You texted ${received_message}'
+		}];
+		callReplyAPI(replyToken, response);
+	}
 }
 
-// Handles messaging_postbacks events
-function handlePostback(sender_psid, received_postback) {
-    console.log('handlePostback');
-}
+function callReplyAPI(replyToken, response) {
+	console.log('replyToken');
+	console.log('replyToken replyToken : ' + replyToken);
+	console.log(response);
 
-// Sends response messages via the Send API
-function callSendAPI(sender_psid, response) {
-    console.log('callSendAPI');
-    // Construct the message body
-    let request_body = {
-        "recipient": {
-            "id": sender_psid
-        },
-        "message": response
-    }
+	let request_boyd = {
+		'replyToken': replyToken,
+		'messages': response
+	};
 
-    // Send the HTTP request to the Messenger Platform
-    request({
-        "uri": "https://api.line.me/v2/bot/message/reply",
-        "qs": {
-            "access_token": LINE_CHANNEL_TOKEN
-        },
-        "method": "POST",
-        "json": request_body
-    }, (err, res, body) => {
-        if (!err) {
-            console.log(body);
-            console.log('message sent!');
-        } else {
-            console.error("Unable to send message:" + err);
-        }
-    });
+	request({
+		"uri": "https://api.line.me/v2/bot/message/reply",
+		"headers": {
+			"Authorization": 'Bearer ${LINE_CHANNEL_TOKEN}'
+		},
+		"method": "POST",
+		"json": request_body
+	}, (err, res, body) => {
+		if (!err) {
+			console.log(body);
+			console.log('message sent!');
+		} else {
+			console.error("Unable to send message:" + err);
+		}
+	});
 }
